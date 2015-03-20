@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import sched, datetime, time, os
  
  
@@ -42,33 +43,37 @@ def advance_length(string, max_len):
        
  
 def frame(strings, tick):
+    """ Генерирует рамочку вокруг strings используя функции plusminus и advance_length.
+    tick - boolean.
+    """
     max_len = 0
     for string in strings:
-        max_len = max(len(string), max_len)
-    output = []
+        max_len = max(len(string), max_len)  # находим максимальную длину строки
+    output = []  # выходной массив строк
     length_string = (max_len/2+2)
     if tick == 1:
         s1 = "+-" * length_string
     else :
-        s1 = "-+" * length_string
-    if max_len % 2 != 0:
-        s1 += plusminus(tick)
-        right_symbol = tick
-    else:
-        right_symbol = not tick
+        s1 = "-+" * length_string  # генерируем верхнюю строку рамочки
+    if max_len % 2 != 0:  # если в строке нечетное количество символов, то в верхнюю строку рамочки нужно добавить еще один символ
+        s1 += plusminus(tick) # рамочка может быть либо +-+-+- при четном количестве, либо +-+-+-+ при нечетном
+        right_symbol = tick   #                         -....+ < тогда символы по обе стороны строк будут разные
+    else:                     #                         для отслеживания левого символа используется tick, для правого right_symbol
+        right_symbol = not tick  #                      если четная длина рамочки, то tick не совпадает с right_symbol
     output.append(s1)
-    for string in strings:
-        tick = not tick
-        right_symbol = not right_symbol
+    for string in strings:  # для каждой строки
+        tick = not tick  # меняем tick на противоположное значение
+        right_symbol = not right_symbol  # right_symbol тоже
         output.append(plusminus(tick)  + " " + advance_length(string, max_len) + " " + plusminus(right_symbol))
-    tick = not tick
+        # ^^^ выводим каждую строку, слева символ соответствующий tick, справа right_symbol
+    tick = not tick  # снова меняем tick, чтобы нижняя закрывающая рамочка начиналась с другого символа нежели последняя строка
     if tick == 1:
         s1 = "+-" * length_string
     else :
         s1 = "-+" * length_string
     if max_len % 2 != 0:
-        s1 += plusminus(tick)
-    output.append(s1)
+        s1 += plusminus(tick)  # последние шесть строчек копипаст из верхней части
+    output.append(s1)  # добавляем нижнюю рамочку в output
     return output
    
  
