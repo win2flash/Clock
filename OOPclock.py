@@ -84,8 +84,6 @@ def main():
     backwards_clock = BackwardsClock(lesson_agregator)
     clock_agregator.add(clock)
     clock_agregator.add(backwards_clock)
-    for i in xrange(1000):
-	clock_agregator.add(Clock(lesson_agregator))
     clock_agregator.loop()
     
 		     
